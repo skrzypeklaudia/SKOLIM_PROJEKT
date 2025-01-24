@@ -16,7 +16,7 @@ class Song(models.Model):
     release_date = models.DateField(help_text="Data wydania piosenki")
     
     def __str__(self):
-        return f"Piosenka: {self.title} (Z albumu: {self.album.title})"
+        return f' {self.title} ({self.album.title})'
 
 class Concert(models.Model):
     artist = models.CharField(max_length=100, default="Skolim", help_text="Artysta występujący")  # Domyślnie Skolim
@@ -27,7 +27,9 @@ class Concert(models.Model):
         return f"{self.artist} - {self.location} ({self.date})"
     
 class Collaboration(models.Model):
-    artist = models.CharField(max_length=100, blank=False, null= False)
-    song = models.ForeignKey('Song', related_name='collaborations', on_delete=models.CASCADE, blank=False, null= False)  # Wybór piosenki z wcześniej dodanych
+    collaboration = models.CharField(max_length=100)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+    
     def __str__(self):
-        return f"Współpraca z {self.artist} - Piosenka: {self.song.title}"
+        return self.collaboration
+
