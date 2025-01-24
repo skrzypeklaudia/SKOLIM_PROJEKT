@@ -1,3 +1,4 @@
 # Projekt grupowy 
 * Klaudia Skrzypek
-* Katarzyna Olszańska 
+* Katarzyna Olszańska
+* 
