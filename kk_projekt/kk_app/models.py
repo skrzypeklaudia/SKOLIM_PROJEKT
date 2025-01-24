@@ -6,7 +6,7 @@ class Album(models.Model):
     release_date = models.DateField(help_text="Data wydania albumu", editable="False")
 
     def __str__(self):
-        return f"Album: {self.title} ({self.release_date.year})"
+        return f'{self.title} ({self.release_date.year})'
     
     
 class Song(models.Model):
@@ -16,7 +16,7 @@ class Song(models.Model):
     release_date = models.DateField(help_text="Data wydania piosenki")
     
     def __str__(self):
-        return f' {self.title} ({self.album.title})'
+        return f' {self.title} ({self.album.title}{self.duration})'
 
 class Concert(models.Model):
     artist = models.CharField(max_length=100, default="Skolim", help_text="Artysta występujący")  # Domyślnie Skolim
@@ -28,8 +28,8 @@ class Concert(models.Model):
     
 class Collaboration(models.Model):
     collaboration = models.CharField(max_length=100)
-    song = models.ForeignKey(Song, on_delete=models.CASCADE)
-    
+    song_title = models.CharField(max_length=100, help_text="Tytuł piosenki Skolima", blank=False, null=False, default="")
+
     def __str__(self):
-        return self.collaboration
+        return f'{self.collaboration} {self.song_title}'
 
