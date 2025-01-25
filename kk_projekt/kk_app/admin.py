@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Album, Song, Concert, Collaboration
+from django import forms
 
 class AlbumAdmin(admin.ModelAdmin):
     list_display = ['title', 'release_year']

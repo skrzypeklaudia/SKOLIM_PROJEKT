@@ -1,22 +1,22 @@
 from django.db import models
+from datetime import timedelta
 
 # Create your models here.
 class Album(models.Model):
     title = models.CharField(max_length=100, help_text="Tytuł albumu Skolima", blank=False, null= False) # to dodaje tam gdzie sie wpisuje co trzeba wpisac
-    release_date = models.DateField(help_text="Data wydania albumu", editable="False")
+    release_date = models.DateField(help_text="Data wydania albumu", editable=False)
 
     def __str__(self):
         return f'{self.title} ({self.release_date.year})'
     
-    
 class Song(models.Model):
-    title = models.CharField(max_length=100, help_text="Tytuł piosenki Skolima", blank=False, null= False)
-    duration = models.DurationField(help_text="Czas trwania piosenki (HH:MM:SS)", blank=False, null=False)
-    album = models.ForeignKey(Album, related_name='songs', on_delete=models.CASCADE, blank= False)
+    title = models.CharField(max_length=100, help_text="Tytuł piosenki Skolima")
+    duration = models.DurationField(help_text="Czas trwania piosenki")
+    album = models.ForeignKey(Album, related_name='songs', on_delete=models.CASCADE)
     release_date = models.DateField(help_text="Data wydania piosenki")
     
     def __str__(self):
-        return f' {self.title} ({self.album.title}{self.duration})'
+        return f"Piosenka: {self.title} (Z albumu: {self.album.title})"
 
 class Concert(models.Model):
     artist = models.CharField(max_length=100, default="Skolim", help_text="Artysta występujący")  # Domyślnie Skolim
