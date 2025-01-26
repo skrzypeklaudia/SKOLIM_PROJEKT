@@ -1,0 +1,14 @@
+{% extends "kk_app/base.html" %}
+
+{% block title %}Lista albumów{% endblock %}
+
+{% block content %}
+Albumy Skolima
+{% for album in albums %}
+<p>Album: {{ album.title }}</p>
+<p>Artysta: Skolim</p>
+<p>Data wydania: {{ album.release_date }}</p>
+<hr>
+{% endfor %}
+{% endblock %}
+

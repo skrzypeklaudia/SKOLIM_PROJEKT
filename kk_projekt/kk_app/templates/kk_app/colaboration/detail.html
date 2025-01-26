@@ -1,0 +1,9 @@
+{% extends "kk_app/base.html" %}
+
+{% block title %}{{ collaboration.name }}{% endblock %}
+
+{% block content %}
+<p>Kolaboracja: {{ collaboration.collaboration }}</p>
+<p>Piosenka: {{ collaboration.song_title }}</p>
+<p>Data wydania: {{ collaboration.release_date }}</p>
+{% endblock %}

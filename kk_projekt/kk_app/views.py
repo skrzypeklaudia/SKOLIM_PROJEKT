@@ -1,6 +1,6 @@
 
 # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -161,3 +161,43 @@ def collaboration_detail(request, pk):
     elif request.method == 'DELETE':
         collaboration.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Widok listy piosenek
+def song_list_html(request):
+    songs = Song.objects.all()
+    return render(request, 'kk_app/song/list.html', {'songs': songs})
+
+# Widok szczegółów piosenki
+def song_detail_html(request, id):
+    song = get_object_or_404(Song, id=id)
+    return render(request, 'kk_app/song/detail.html', {'song': song})
+
+# Widok listy albumów
+def album_list_html(request):
+    albums = Album.objects.all()
+    return render(request, 'kk_app/album/list.html', {'albums': albums})
+
+# Widok szczegółów albumu
+def album_detail_html(request, id):
+    album = get_object_or_404(Album, id=id)
+    return render(request, 'kk_app/album/detail.html', {'album': album})
+
+# Widok listy koncertów
+def concert_list_html(request):
+    concerts = Concert.objects.all()
+    return render(request, 'kk_app/concert/list.html', {'concerts': concerts})
+
+# Widok szczegółów koncertu
+def concert_detail_html(request, id):
+    concert = get_object_or_404(Concert, id=id)
+    return render(request, 'kk_app/concert/detail.html', {'concert': concert})
+
+# Widok listy współprac
+def collaboration_list_html(request):
+    collaborations = Collaboration.objects.all()
+    return render(request, 'kk_app/collaboration/list.html', {'collaborations': collaborations})
+
+# Widok szczegółów współpracy
+def collaboration_detail_html(request, id):
+    collaboration = get_object_or_404(Collaboration, id=id)
+    return render(request, 'kk_app/collaboration/detail.html', {'collaboration': collaboration})

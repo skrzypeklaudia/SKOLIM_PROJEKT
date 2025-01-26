@@ -1,0 +1,12 @@
+{% extends "kk_app/base.html" %}
+
+{% block title %}{{ song.name }}{% endblock %}
+
+{% block content %}
+<p>Utwór: {{ song.title }}</p>
+<p>Artysta: Skolim</p>
+<p>Album: {{ song.album }}</p>
+<p>Data wydania: {{ song.release_date }}</p>
+<p>Czas Trwania: {{ song.duration }}</p>
+{% endblock %}
+

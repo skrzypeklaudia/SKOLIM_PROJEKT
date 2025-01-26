@@ -1,0 +1,16 @@
+{% extends "kk_app/base.html" %}
+
+{% block title %}Lista utworów{% endblock %}
+
+{% block content %}
+Utwory Skolima
+{% for song in songs %}
+<p>Utwór: {{ song.title }}</p>
+<p>Artysta: Skolim</p>
+<p>Album: {{ song.album }}</p>
+<p>Data wydania: {{ song.release_date }}</p>
+<p>Czas Trwania: {{ song.duration }}</p>
+<hr>
+{% endfor %}
+{% endblock %}
+

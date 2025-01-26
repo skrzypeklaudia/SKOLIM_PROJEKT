@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SKOLIM Projekt{% endblock %}</title>
+    <link href="{% static "css/kk_app.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div id="header">
+        <h1>SKOLIM</h1>
+    </div>
+
+    <div id="main-container">
+        <div id="content">
+            {% block content %}
+            <!-- Zawartość strony będzie wstawiana tutaj -->
+            {% endblock %}
+        </div>
+
+    
+    </div>
+
+    <footer>
+        <p>&copy; 2025 SKOLIM Projekt</p>
+    </footer>
+</body>
+</html>
+
