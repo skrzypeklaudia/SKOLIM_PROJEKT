@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Album, Song, Concert, Collaboration
 from .serializers import AlbumSerializer, SongSerializer, ConcertSerializer, CollaborationSerializer
+from rest_framework.views import APIView
 
 
 @api_view(['GET'])
@@ -160,4 +161,48 @@ def collaboration_detail(request, pk):
 
     elif request.method == 'DELETE':
         collaboration.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Klasa dla albumów z wykorzystaniem APIView
+class AlbumList(APIView):
+    def get(self, request):
+        albums = Album.objects.all()
+        serializer = AlbumSerializer(albums, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = AlbumSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Klasa dla pojedynczego albumu z wykorzystaniem APIView
+class AlbumDetail(APIView):
+    def get(self, request, pk):
+        try:
+            album = Album.objects.get(pk=pk)
+        except Album.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = AlbumSerializer(album)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        try:
+            album = Album.objects.get(pk=pk)
+        except Album.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = AlbumSerializer(album, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            album = Album.objects.get(pk=pk)
+        except Album.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        album.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
