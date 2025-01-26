@@ -1,0 +1,14 @@
+{% extends "kk_app/base.html" %}
+
+{% block title %}Lista kolaboracji{% endblock %}
+
+{% block content %}
+Kolaboracje Skolima
+{% for collaboration in collaborations %}
+<p>Kolaboracja: {{ collaboration.collaboration }}</p>
+<p>Piosenka: {{ collaboration.song_title }}</p>
+<p>Data wydania: {{ collaboration.release_date }}</p>
+<hr>
+{% endfor %}
+{% endblock %}
+

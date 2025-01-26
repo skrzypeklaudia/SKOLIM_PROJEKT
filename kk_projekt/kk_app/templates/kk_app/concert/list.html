@@ -1,0 +1,14 @@
+{% extends "kk_app/base.html" %}
+
+{% block title %}Lista koncertów{% endblock %}
+
+{% block content %}
+<h1>Koncerty Skolima</h1>
+{% for concert in concerts %}
+<p>Data: {{ concert.date }}</p>
+<p>Miejsce: {{ concert.location }}</p>
+<p>Artysta: {{ concert.artist }}</p>
+<hr>
+{% endfor %}
+{% endblock %}
+
