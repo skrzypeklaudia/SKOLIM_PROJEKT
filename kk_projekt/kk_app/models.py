@@ -4,14 +4,14 @@ from datetime import timedelta
 # Create your models here.
 class Album(models.Model):
     title = models.CharField(max_length=100, help_text="Tytuł albumu Skolima", blank=False, null= False) # to dodaje tam gdzie sie wpisuje co trzeba wpisac
-    release_date = models.DateField(help_text="Data wydania albumu", editable=False)
+    release_date = models.DateField(help_text="Data wydania albumu",  blank=False, null= False)
 
     def __str__(self):
         return f'{self.title} ({self.release_date.year})'
     
 class Song(models.Model):
     title = models.CharField(max_length=100, help_text="Tytuł piosenki Skolima")
-    duration = models.DurationField(help_text="Czas trwania piosenki")
+    duration = models.CharField(max_length=8, help_text="Czas trwania piosenki w formacie HH:MM:SS")
     album = models.ForeignKey(Album, related_name='songs', on_delete=models.CASCADE)
     release_date = models.DateField(help_text="Data wydania piosenki")
     
