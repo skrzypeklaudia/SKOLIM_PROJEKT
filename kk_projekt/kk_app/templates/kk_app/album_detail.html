@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ album.title }}</title>
+</head>
+<body>
+    <header>
+        <h1>{{ album.title }}</h1>
+        <p>Data wydania: {{ album.release_date }}</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'albums' %}">Wróć do listy albumów</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h2>Piosenki w albumie:</h2>
+        <ul>
+            {% for song in songs %}
+                <li>{{ song.title }} - {{ song.duration }}</li>
+            {% empty %}
+                <p>Brak piosenek w tym albumie.</p>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>

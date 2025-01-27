@@ -161,3 +161,27 @@ def collaboration_detail(request, pk):
     elif request.method == 'DELETE':
         collaboration.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+def home_view_html(request):
+    return render(request, 'kk_app/home.html')
+
+def albums_view_html(request):
+    albums = Album.objects.all()
+    return render(request, 'kk_app/albums.html', {'albums': albums})
+
+def songs_view_html(request):
+    songs = Song.objects.all()
+    return render(request, 'kk_app/songs.html', {'songs': songs})
+
+def concerts_view_html(request):
+    concerts = Concert.objects.all()
+    return render(request, 'kk_app/concerts.html', {'concerts': concerts})
+
+def collaborations_view_html(request):
+    collaborations = Collaboration.objects.all()
+    return render(request, 'kk_app/collaborations.html', {'collaborations': collaborations})
+
+def album_detail_view(request, album_id):
+    album = get_object_or_404(Album, id=album_id)
+    songs = Song.objects.filter(album=album)
+    return render(request, 'kk_app/album_detail.html', {'album': album, 'songs': songs})

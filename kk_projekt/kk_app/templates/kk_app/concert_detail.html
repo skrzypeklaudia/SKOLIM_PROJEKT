@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ concert.title }}</title>
+</head>
+<body>
+    <header>
+        <h1>{{ concert.title }}</h1>
+        <p>Data: {{ concert.date }}</p>
+        <p>Miejsce: {{ concert.location }}</p>
+    </header>
+    <nav>
+        <a href="{% url 'concerts' %}">Wróć do listy koncertów</a>
+    </nav>
+</body>
+</html>

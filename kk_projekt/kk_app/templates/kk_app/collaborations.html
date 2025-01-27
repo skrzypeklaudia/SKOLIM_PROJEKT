@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolaboracje Skolima</title>
+</head>
+<body>
+    <header>
+        <h1>Kolaboracje</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Strona Główna</a></li>
+            <li><a href="{% url 'albums' %}">Albumy</a></li>
+            <li><a href="{% url 'songs' %}">Piosenki</a></li>
+            <li><a href="{% url 'concerts' %}">Koncerty</a></li>
+        </ul>
+    </nav>
+    <main>
+        <ul>
+            {% for collaboration in collaborations %}
+                <li>
+                    <a href="{% url 'collaboration_detail' collaboration.id %}">
+                        {{ collaboration.title }} z {{ collaboration.artist_name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ collaboration.title }}</title>
+</head>
+<body>
+    <header>
+        <h1>{{ collaboration.title }}</h1>
+        <p>Artysta: {{ collaboration.artist_name }}</p>
+        <p>Data: {{ collaboration.date }}</p>
+    </header>
+    <nav>
+        <a href="{% url 'collaborations' %}">Wróć do listy kolaboracji</a>
+    </nav>
+</body>
+</html>
