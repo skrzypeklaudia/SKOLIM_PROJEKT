@@ -1,29 +1,37 @@
 
-# Create your views here.
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from .models import Album, Song, Concert, Collaboration
 from .serializers import AlbumSerializer, SongSerializer, ConcertSerializer, CollaborationSerializer
 
 
-@api_view(['GET'])
-def album_list(request): # wszystkie obiekty
-    """
-    Lista wszystkich obiektów modelu Album.
-    """
+# Album Views
+@api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def album_list(request):
     if request.method == 'GET':
         albums = Album.objects.all()
         serializer = AlbumSerializer(albums, many=True)
         return Response(serializer.data)
 
+    elif request.method == 'POST':
+        serializer = AlbumSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def album_detail(request, pk): # operacja na pojedynczym obiekcie
-    """
-    Szczegóły pojedynczego obiektu Album.
-    """
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def album_detail(request, pk):
     try:
         album = Album.objects.get(pk=pk)
     except Album.DoesNotExist:
@@ -45,16 +53,16 @@ def album_detail(request, pk): # operacja na pojedynczym obiekcie
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# Song Views
 @api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def song_list(request):
-    """
-    Lista wszystkich obiektów modelu Song oraz dodawanie nowych.
-    """
     if request.method == 'GET':
         songs = Song.objects.all()
         serializer = SongSerializer(songs, many=True)
         return Response(serializer.data)
-    
+
     elif request.method == 'POST':
         serializer = SongSerializer(data=request.data)
         if serializer.is_valid():
@@ -64,10 +72,9 @@ def song_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def song_detail(request, pk):
-    """
-    Wyświetlanie, edytowanie i usuwanie pojedynczego obiektu modelu Song.
-    """
     try:
         song = Song.objects.get(pk=pk)
     except Song.DoesNotExist:
@@ -89,22 +96,28 @@ def song_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['GET'])
+# Concert Views
+@api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def concert_list(request):
-    """
-    Lista wszystkich obiektów modelu Concert.
-    """
     if request.method == 'GET':
         concerts = Concert.objects.all()
         serializer = ConcertSerializer(concerts, many=True)
         return Response(serializer.data)
 
+    elif request.method == 'POST':
+        serializer = ConcertSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def concert_detail(request, pk):
-    """
-    Szczegóły pojedynczego obiektu Concert.
-    """
     try:
         concert = Concert.objects.get(pk=pk)
     except Concert.DoesNotExist:
@@ -126,22 +139,28 @@ def concert_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['GET'])
+# Collaboration Views
+@api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def collaboration_list(request):
-    """
-    Lista wszystkich obiektów modelu Collaboration.
-    """
     if request.method == 'GET':
         collaborations = Collaboration.objects.all()
         serializer = CollaborationSerializer(collaborations, many=True)
         return Response(serializer.data)
 
+    elif request.method == 'POST':
+        serializer = CollaborationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def collaboration_detail(request, pk):
-    """
-    Szczegóły pojedynczego obiektu Collaboration.
-    """
     try:
         collaboration = Collaboration.objects.get(pk=pk)
     except Collaboration.DoesNotExist:
@@ -161,6 +180,95 @@ def collaboration_detail(request, pk):
     elif request.method == 'DELETE':
         collaboration.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Album Views
+@api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def album_update_delete(request, pk):
+    try:
+        album = Album.objects.get(pk=pk)
+    except Album.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = AlbumSerializer(album, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        album.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Song Views
+@api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def song_update_delete(request, pk):
+    try:
+        song = Song.objects.get(pk=pk)
+    except Song.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = SongSerializer(song, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        song.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Concert Views
+@api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def concert_update_delete(request, pk):
+    try:
+        concert = Concert.objects.get(pk=pk)
+    except Concert.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = ConcertSerializer(concert, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        concert.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Collaboration Views
+@api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def collaboration_update_delete(request, pk):
+    try:
+        collaboration = Collaboration.objects.get(pk=pk)
+    except Collaboration.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = CollaborationSerializer(collaboration, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        collaboration.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # Widok listy piosenek
 def song_list_html(request):
