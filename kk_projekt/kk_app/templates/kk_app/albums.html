@@ -79,6 +79,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
+            position: relative;
         }
 
         main ul li:hover {
@@ -86,14 +87,25 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
-        main ul li a {
-            text-decoration: none;
-            color: inherit;
-            font-weight: bold;
+        .album-details {
+            display: none; /* Ukryte domyślnie */
+            margin-top: 10px;
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
         }
 
-        main ul li a:hover {
-            color: #0066cc; /* Jasnoniebieski akcent po najechaniu */
+        .album-details.visible {
+            display: block; /* Wyświetlane po rozwinięciu */
+        }
+
+        .toggle-details {
+            cursor: pointer;
+            color: #0066cc;
+            text-decoration: underline;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -111,16 +123,34 @@
     </nav>
     <main>
         <ul>
-            {% for album in albums %}
+            {% if albums %}
+                {% for album in albums %}
                 <li>
-                    <a href="{% url 'album_detail' album.id %}">
-                        {{ album.title }} ({{ album.release_date }})
-                    </a>
+                    <strong>{{ album.title }}</strong>
+                    <div class="toggle-details" onclick="toggleDetails('{{ forloop.counter0 }}')">
+                        Pokaż szczegóły
+                    </div>
+                    <div id="details-{{ forloop.counter0 }}" class="album-details">
+                        <p><strong>Data wydania:</strong> {{ album.release_date }}</p>
+                    </div>
                 </li>
-            {% empty %}
+                
+                {% endfor %}
+            {% else %}
                 <li>Brak albumów do wyświetlenia.</li>
-            {% endfor %}
+            {% endif %}
         </ul>
     </main>
+    <script>
+        function toggleDetails(index) {
+            const details = document.getElementById(`details-${index}`);
+            if (details.classList.contains('visible')) {
+                details.classList.remove('visible');
+            } else {
+                details.classList.add('visible');
+            }
+        }
+    </script>
 </body>
 </html>
+

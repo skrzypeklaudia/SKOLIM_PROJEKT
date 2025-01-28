@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [ 
     path('albums/', views.album_list, name='album_list'),
     path('albums/<int:pk>/', views.album_detail, name='album_detail'),
-    path('albums/<int:album_id>/', views.album_detail_view, name='album_detail'),
+    path('albums/<int:album_id>/', views.album_detail_view_html, name='album_detail'),
     path('songs/', views.song_list, name='song_list'),
     path('songs/<int:pk>/', views.song_detail, name='song_detail'),
     path('concerts/', views.concert_list, name='concert_list'),
@@ -18,7 +18,7 @@ urlpatterns = [
     path('collaborations_html/', views.collaborations_view_html, name='collaborations'),
     path('home_html/', views.home_view_html, name='homepage'),  # Strona główna
     path('register/', views.register_user, name='register_user'),
-    path('login/', views.login_user, name='login_user'),
-    path('logout/', views.logout_user, name='logout_user'),
+    path('login/', views.login_view, name='login'),
     path('user_panel/', views.user_panel, name='user_panel'),
+    path('api/logout/', views.LogoutView.as_view(), name='api_logout'),
 ]

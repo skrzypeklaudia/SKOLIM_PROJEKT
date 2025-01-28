@@ -19,9 +19,8 @@
         <h2>Piosenki w albumie:</h2>
         <ul>
             {% for song in songs %}
-            <a href="{% url 'song_detail' album.id %}"></a>
+            <a href="{% url 'songs' %}"></a>
                 <li>{{ song.title }} - {{ song.duration }}</li>
-            {% empty %}
                 <p>Brak piosenek w tym albumie.</p>
             {% endfor %}
         </ul>

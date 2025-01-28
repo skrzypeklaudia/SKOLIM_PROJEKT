@@ -66,7 +66,7 @@
 <body>
     <div class="login-panel">
         <h2>Zaloguj się</h2>
-        <form method="post" action="{% url 'login_user' %}">
+        <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <label for="username">Nazwa użytkownika:</label>
             <input type="text" id="username" name="username" required>

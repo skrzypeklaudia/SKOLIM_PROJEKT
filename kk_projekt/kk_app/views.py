@@ -1,15 +1,20 @@
-
-# Create your views here.
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import Album, Song, Concert, Collaboration
-from .serializers import AlbumSerializer, SongSerializer, ConcertSerializer, CollaborationSerializer, UserSerializer
+from rest_framework.views import APIView
+from .models import Album, Song, Collaboration, Concert
+from .permissions import CustomDjangoModelPermissions
+from .serializers import AlbumSerializer, SongSerializer, CollaborationSerializer, ConcertSerializer
+from django.http import HttpResponse, Http404
+import datetime
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
 
 
 @api_view(['POST'])
@@ -33,11 +38,24 @@ def login_user(request):
         return Response({"message": "Zalogowano pomyślnie!"}, status=status.HTTP_200_OK)
     return Response(request, 'kk_app/login_user.html',{"error": "Nieprawidłowa nazwa użytkownika lub hasło."}, status=status.HTTP_401_UNAUTHORIZED)
 
-@api_view(['GET'])
-def logout_user(request):
-    """Wylogowanie użytkownika."""
-    logout(request)
-    return render(request, 'kk_app/logout_user.html','/')
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        logout(request)  # Usuwa sesję użytkownika
+        return Response({"message": "Wylogowano pomyślnie!"})
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('homepage')  # Przekierowanie na stronę główną
+        else:
+            return render(request, 'login.html', {'error_message': 'Nieprawidłowa nazwa użytkownika lub hasło.'})
+    return render(request, 'login.html')
 
 @login_required
 def user_panel(request):
@@ -129,6 +147,7 @@ def song_detail(request, pk):
     elif request.method == 'DELETE':
         song.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    return render(request, 'kk_app/song_detail.html')
 
 
 @api_view(['GET'])
@@ -236,7 +255,7 @@ def collaborations_view_html(request):
     collaborations = Collaboration.objects.all()
     return render(request, 'kk_app/collaborations.html', {'collaborations': collaborations})
 
-def album_detail_view(request, album_id):
+def album_detail_view_html(request, album_id):
     album = get_object_or_404(Album, id=album_id)
     songs = Song.objects.filter(album=album)
     return render(request, 'kk_app/album_detail.html', {'album': album, 'songs': songs})
