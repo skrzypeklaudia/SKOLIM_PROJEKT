@@ -1,6 +1,8 @@
 from django.urls import path, include
 from django.contrib import admin
 from . import views
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [ 
     path('albums/', views.album_list, name='album_list'),
@@ -22,4 +24,6 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout_user'),
     path('user_panel/', views.user_panel, name='user_panel'),
     path('', views.homepage, name='home'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]

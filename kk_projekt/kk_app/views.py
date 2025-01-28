@@ -12,6 +12,11 @@ from .models import Album, Song, Concert, Collaboration
 from .serializers import AlbumSerializer, SongSerializer, ConcertSerializer, CollaborationSerializer, UserSerializer
 from django.http import JsonResponse
 
+@api_view(['GET'])
+def logout_user(request):
+    """Wylogowanie użytkownika."""
+    logout(request)
+    return redirect('home')
 
 
 @api_view(['POST'])
@@ -51,8 +56,9 @@ def logout_user(request):
 @login_required
 def user_panel(request):
     """Panel użytkownika."""
-    return render(request, 'user_panel.html', {'user': request.user})
+    return render(request, 'kk_app/user_panel.html', {'user': request.user})
 
+@login_required
 def homepage(request):
     """Strona główna."""
     return render(request, 'kk_app/home.html')
