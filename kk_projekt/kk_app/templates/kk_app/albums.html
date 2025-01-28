@@ -4,10 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Albumy Skolima</title>
+    <!-- Import eleganckich czcionek z Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Ogólne stylizacje */
+        body {
+            font-family: 'Lato', sans-serif; /* Czcionka dla treści */
+            margin: 0;
+            padding: 0;
+            background-color: #fdfdfd; /* Subtelne jasne tło */
+            color: #333; /* Ciemnoszary tekst */
+            line-height: 1.6;
+        }
+
+        /* Nagłówek */
+        header {
+            background-color: #0066cc; /* Jasnoniebieski nagłówek */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-family: 'Playfair Display', serif; /* Elegancka czcionka dla nagłówka */
+            font-size: 2.5em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Nawigacja */
+        nav {
+            background-color: #003366; /* Ciemnoniebieskie tło nawigacji */
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #99ccff; /* Jasnoniebieski kolor po najechaniu */
+        }
+
+        /* Główna zawartość */
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        main ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        main ul li {
+            background-color: white;
+            color: #003366; /* Ciemnoniebieski tekst */
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        main ul li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        main ul li a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: bold;
+        }
+
+        main ul li a:hover {
+            color: #0066cc; /* Jasnoniebieski akcent po najechaniu */
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Albumy</h1>
+        <h1>Albumy Skolima</h1>
     </header>
     <nav>
         <ul>
@@ -25,9 +117,10 @@
                         {{ album.title }} ({{ album.release_date }})
                     </a>
                 </li>
+            {% empty %}
+                <li>Brak albumów do wyświetlenia.</li>
             {% endfor %}
         </ul>
     </main>
 </body>
 </html>
-

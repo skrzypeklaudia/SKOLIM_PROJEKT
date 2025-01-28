@@ -1,12 +1,62 @@
 
 # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .models import Album, Song, Concert, Collaboration
-from .serializers import AlbumSerializer, SongSerializer, ConcertSerializer, CollaborationSerializer
+from .serializers import AlbumSerializer, SongSerializer, ConcertSerializer, CollaborationSerializer, UserSerializer
 
+
+@api_view(['POST'])
+def register_user(request):
+    """Rejestracja nowego użytkownika."""
+    if request.method == 'POST':
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                "message": "User registered successfully!",
+                "username": user.username,
+                "email": user.email,
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def login_user(request):
+    """Logowanie użytkownika."""
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return Response({"message": "Zalogowano pomyślnie!"}, status=status.HTTP_200_OK)
+    return Response({"error": "Nieprawidłowa nazwa użytkownika lub hasło."}, status=status.HTTP_401_UNAUTHORIZED)
+
+login_required
+def user_panel(request):
+    """Panel użytkownika."""
+    return render(request, 'user_panel.html', {'user': request.user})
+@csrf_exempt
+@api_view(['POST'])
+def register_user(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Użytkownik zarejestrowany pomyślnie!"}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def logout_user(request):
+    """Wylogowanie użytkownika."""
+    logout(request)
+    return redirect('/')
 
 @api_view(['GET'])
 def album_list(request): # wszystkie obiekty

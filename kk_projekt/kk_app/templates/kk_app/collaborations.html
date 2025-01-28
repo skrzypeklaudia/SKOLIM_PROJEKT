@@ -4,6 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kolaboracje Skolima</title>
+    <!-- Import czcionek z Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Ogólne stylizacje */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Jasne tło */
+            color: #333; /* Ciemnoszary tekst */
+        }
+
+        /* Nagłówek */
+        header {
+            background-color: #0066cc; /* Niebieskie tło */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-family: 'Playfair Display', serif; /* Elegancka czcionka */
+            font-size: 2.5em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Nawigacja */
+        nav {
+            background-color: #003366; /* Ciemnoniebieskie tło */
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #99ccff; /* Jaśniejszy niebieski */
+        }
+
+        /* Główna zawartość */
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .collaboration-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .collaboration-item {
+            background-color: white;
+            color: #003366; /* Akcent niebieski */
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .collaboration-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .collaboration-item strong {
+            font-weight: bold;
+            display: block;
+            font-size: 1.3em; /* Większy rozmiar czcionki dla tytułu */
+        }
+
+        .collaboration-item span {
+            display: block;
+            font-size: 1em;
+            color: #666; /* Szary kolor dla szczegółów */
+            margin-top: 5px;
+        }
+
+        .collaboration-item span.important {
+            font-weight: bold; /* Pogrubienie szczegółów */
+            color: #003366; /* Ciemnoniebieski tekst */
+        }
+
+        /* Obsługa pustej listy */
+        .no-collaborations {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -18,13 +126,15 @@
         </ul>
     </nav>
     <main>
-        <ul>
+        <ul class="collaboration-list">
             {% for collaboration in collaborations %}
-                <li>
-                    <a href="{% url 'collaboration_detail' collaboration.id %}">
-                        {{ collaboration.title }} z {{ collaboration.artist_name }}
-                    </a>
+                <li class="collaboration-item">
+                    <strong>{{ collaboration.title }}</strong>
+                    <span class="important">Artysta: {{ collaboration.artist_name }}</span>
+                    <span class="important">Utwór: {{ collaboration.song_title }}</span>
                 </li>
+            {% empty %}
+                <li class="no-collaborations">Brak kolaboracji do wyświetlenia.</li>
             {% endfor %}
         </ul>
     </main>

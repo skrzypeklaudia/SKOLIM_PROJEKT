@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from datetime import date
-from .models import Album, Song, Concert, Collaboration
+from .models import Album, Song, Concert, Collaboration, User
 import re
 
 
@@ -87,3 +87,35 @@ class CollaborationSerializer(serializers.ModelSerializer):
         model = Collaboration
         fields = ['id', 'collaboration', 'song_title']
         read_only_fields = ['id']
+
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer dla modelu User, umożliwiający rejestrację użytkowników"""
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}  # Hasło jest tylko do zapisu
+
+    def create(self, validated_data):
+        """Tworzy nowego użytkownika i zapisuje hasło w postaci zaszyfrowanej"""
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
+    
+    class UserSerializer(serializers.ModelSerializer):
+        password = serializers.CharField(write_only=True)  # Hasło tylko do zapisu
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']  # Pola wymagane do rejestracji
+
+    def create(self, validated_data):
+        """Tworzy nowego użytkownika z zaszyfrowanym hasłem"""
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
