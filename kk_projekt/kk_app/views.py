@@ -10,6 +10,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .models import Album, Song, Concert, Collaboration
 from .serializers import AlbumSerializer, SongSerializer, ConcertSerializer, CollaborationSerializer, UserSerializer
+from django.http import JsonResponse
+
 
 
 @api_view(['POST'])
@@ -21,17 +23,24 @@ def register_user(request):
         return Response({"message": "Użytkownik zarejestrowany pomyślnie!"}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+@csrf_exempt
 def login_user(request):
     """Logowanie użytkownika."""
-    username = request.data.get('username')
-    password = request.data.get('password')
+    if request.method == 'POST':
+        username = request.POST.get('username') or request.data.get('username')
+        password = request.POST.get('password') or request.data.get('password')
 
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return Response({"message": "Zalogowano pomyślnie!"}, status=status.HTTP_200_OK)
-    return Response({"error": "Nieprawidłowa nazwa użytkownika lub hasło."}, status=status.HTTP_401_UNAUTHORIZED)
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if request.content_type == 'application/json':
+                return JsonResponse({"message": "Zalogowano pomyślnie!"}, status=200)
+            return redirect('user_panel')
+        else:
+            if request.content_type == 'application/json':
+                return JsonResponse({"error": "Nieprawidłowa nazwa użytkownika lub hasło."}, status=401)
+            return render(request, 'kk_app/home.html', {'error_message': 'Nieprawidłowa nazwa użytkownika lub hasło.'})
+    return render(request, 'kk_app/home.html')
 
 @api_view(['GET'])
 def logout_user(request):
