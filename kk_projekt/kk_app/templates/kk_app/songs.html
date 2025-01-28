@@ -4,15 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piosenki Skolima</title>
+    <!-- Import czcionek z Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Ogólne stylizacje */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Jasne tło */
+            color: #333; /* Ciemnoszary tekst */
+        }
+
+        /* Nagłówek */
+        header {
+            background-color: #0066cc; /* Niebieskie tło */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-family: 'Playfair Display', serif; /* Elegancka czcionka */
+            font-size: 2.5em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Nawigacja */
+        nav {
+            background-color: #003366; /* Ciemnoniebieskie tło */
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #99ccff; /* Jaśniejszy niebieski */
+        }
+
+        /* Główna zawartość */
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .song-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .song-item {
+            background-color: white;
+            color: #003366; /* Akcent niebieski */
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .song-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .song-item strong {
+            font-weight: bold;
+            display: block;
+            font-size: 1.3em; /* Większy rozmiar czcionki dla tytułu */
+        }
+
+        .song-item span {
+            display: block;
+            font-size: 1em;
+            color: #666; /* Szary kolor dla szczegółów */
+            margin-top: 5px;
+        }
+
+        .song-item span.important {
+            font-weight: bold; /* Pogrubienie szczegółów */
+            color: #003366; /* Ciemnoniebieski tekst */
+        }
+
+        /* Obsługa pustej listy */
+        .no-songs {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>Piosenki</h1>
     </header>
-    <main>
+    <nav>
         <ul>
+            <li><a href="{% url 'home' %}">Strona Główna</a></li>
+            <li><a href="{% url 'albums' %}">Albumy</a></li>
+            <li><a href="{% url 'concerts' %}">Koncerty</a></li>
+            <li><a href="{% url 'collaborations' %}">Kolaboracje</a></li>
+        </ul>
+    </nav>
+    <main>
+        <ul class="song-list">
             {% for song in songs %}
-                <li>{{ song.title }} ({{ song.album.title }}) - {{ song.duration }}</li>
+                <li class="song-item">
+                    <strong>{{ song.title }}</strong>
+                    <span class="important">Album: <a href="{% url 'album_detail' song.album.id %}">{{ song.album.title }}</a></span>
+                    <span class="important">Czas trwania: {{ song.duration }}</span>
+                </li>
+            {% empty %}
+                <li class="no-songs">Brak piosenek do wyświetlenia.</li>
             {% endfor %}
         </ul>
     </main>

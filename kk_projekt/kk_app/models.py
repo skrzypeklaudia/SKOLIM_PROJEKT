@@ -33,3 +33,10 @@ class Collaboration(models.Model):
     def __str__(self):
         return f'{self.collaboration} {self.song_title}'
 
+class User(models.Model):
+    imie = models.CharField(max_length=100, blank=False, null=False)
+    nazwisko = models.CharField(max_length=500, blank=False, null=False)
+    pseudonim = models.CharField(max_length=100, blank=False)
+    email = models.EmailField(unique=True, blank=False, null=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
