@@ -45,10 +45,8 @@ def user_panel(request):
     return render(request, 'user_panel.html', {'user': request.user})
 
 def homepage(request):
-    """Strona główna z panelem logowania."""
-    if request.user.is_authenticated:
-        return redirect('user_panel')  # Przekierowanie do panelu użytkownika, jeśli zalogowany
-    return render(request, 'login_panel.html')
+    """Strona główna."""
+    return render(request, 'kk_app/home.html')
 
 @api_view(['GET'])
 def album_list(request): # wszystkie obiekty
