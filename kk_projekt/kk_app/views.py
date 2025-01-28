@@ -15,16 +15,11 @@ from .serializers import AlbumSerializer, SongSerializer, ConcertSerializer, Col
 @api_view(['POST'])
 def register_user(request):
     """Rejestracja nowego użytkownika."""
-    if request.method == 'POST':
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response({
-                "message": "User registered successfully!",
-                "username": user.username,
-                "email": user.email,
-            }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Użytkownik zarejestrowany pomyślnie!"}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def login_user(request):
@@ -38,25 +33,22 @@ def login_user(request):
         return Response({"message": "Zalogowano pomyślnie!"}, status=status.HTTP_200_OK)
     return Response({"error": "Nieprawidłowa nazwa użytkownika lub hasło."}, status=status.HTTP_401_UNAUTHORIZED)
 
-login_required
-def user_panel(request):
-    """Panel użytkownika."""
-    return render(request, 'user_panel.html', {'user': request.user})
-@csrf_exempt
-@api_view(['POST'])
-def register_user(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({"message": "Użytkownik zarejestrowany pomyślnie!"}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(['GET'])
 def logout_user(request):
     """Wylogowanie użytkownika."""
     logout(request)
     return redirect('/')
+
+@login_required
+def user_panel(request):
+    """Panel użytkownika."""
+    return render(request, 'user_panel.html', {'user': request.user})
+
+def homepage(request):
+    """Strona główna z panelem logowania."""
+    if request.user.is_authenticated:
+        return redirect('user_panel')  # Przekierowanie do panelu użytkownika, jeśli zalogowany
+    return render(request, 'login_panel.html')
 
 @api_view(['GET'])
 def album_list(request): # wszystkie obiekty
@@ -213,7 +205,20 @@ def collaboration_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 def home_view_html(request):
-    return render(request, 'kk_app/home.html')
+    """Strona główna z panelem logowania."""
+    error_message = None
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('user_panel')  # Przekierowanie po zalogowaniu
+        else:
+            error_message = 'Nieprawidłowa nazwa użytkownika lub hasło.'
+
+    return render(request, 'kk_app/home.html', {'error_message': error_message})
 
 def albums_view_html(request):
     albums = Album.objects.all()

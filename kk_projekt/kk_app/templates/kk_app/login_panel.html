@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strona główna</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .login-panel {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+        .login-panel h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+        .login-panel label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .login-panel input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .login-panel button {
+            width: 100%;
+            padding: 8px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-panel button:hover {
+            background-color: #0056b3;
+        }
+        .login-panel p {
+            margin: 10px 0 0;
+            font-size: 14px;
+        }
+        .login-panel a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .login-panel a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-panel">
+        <h2>Zaloguj się</h2>
+        <form method="post" action="{% url 'login_user' %}">
+            {% csrf_token %}
+            <label for="username">Nazwa użytkownika:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Hasło:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Zaloguj</button>
+        </form>
+        <p>Nie masz konta? <a href="{% url 'register_user' %}">Zarejestruj się</a></p>
+    </div>
+</body>
+</html>
+

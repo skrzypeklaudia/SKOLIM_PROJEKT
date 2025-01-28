@@ -11,10 +11,14 @@ urlpatterns = [
     path('concerts/', views.concert_list, name='concert_list'),
     path('concerts/<int:pk>/', views.concert_detail, name='concert_detail'),
     path('collaborations/', views.collaboration_list, name='collaboration_list'),
-    path('collaborations/<int:pk>/', views.collaboration_detail, name='collaboration_detail'),
-    path('home_html/', views.home_view_html, name='home'),  # Strona główna aplikacji
+    path('collaborations/<int:pk>/', views.collaboration_detail, name='collaboration_detail'),  
     path('albums_html/', views.albums_view_html, name='albums'),
     path('songs_html/', views.songs_view_html, name='songs'),
     path('concerts_html/', views.concerts_view_html, name='concerts'),
     path('collaborations_html/', views.collaborations_view_html, name='collaborations'),
+    path('home_html/', views.home_view_html, name='homepage'),  # Strona główna
+    path('register/', views.register_user, name='register_user'),
+    path('login/', views.login_user, name='login_user'),
+    path('logout/', views.logout_user, name='logout_user'),
+    path('user-panel/', views.user_panel, name='user_panel'),
 ]
