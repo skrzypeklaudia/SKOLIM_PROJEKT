@@ -19,7 +19,7 @@ def register_user(request):
     if serializer.is_valid():
         serializer.save()
         return Response({"message": "Użytkownik zarejestrowany pomyślnie!"}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(request, 'kk_app/register_user.html', serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def login_user(request):
@@ -31,24 +31,24 @@ def login_user(request):
     if user is not None:
         login(request, user)
         return Response({"message": "Zalogowano pomyślnie!"}, status=status.HTTP_200_OK)
-    return Response({"error": "Nieprawidłowa nazwa użytkownika lub hasło."}, status=status.HTTP_401_UNAUTHORIZED)
+    return Response(request, 'kk_app/login_user.html',{"error": "Nieprawidłowa nazwa użytkownika lub hasło."}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
 def logout_user(request):
     """Wylogowanie użytkownika."""
     logout(request)
-    return redirect('/')
+    return render(request, 'kk_app/logout_user.html','/')
 
 @login_required
 def user_panel(request):
     """Panel użytkownika."""
-    return render(request, 'user_panel.html', {'user': request.user})
+    return render(request, 'kk_app/user_panel.html', {'user': request.user})
 
 def homepage(request):
     """Strona główna z panelem logowania."""
     if request.user.is_authenticated:
         return redirect('user_panel')  # Przekierowanie do panelu użytkownika, jeśli zalogowany
-    return render(request, 'login_panel.html')
+    return render(request, 'kk_app/login_panel.html')
 
 @api_view(['GET'])
 def album_list(request): # wszystkie obiekty
